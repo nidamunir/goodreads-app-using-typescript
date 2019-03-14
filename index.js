@@ -3,28 +3,21 @@ const app = express();
 const axios = require('axios');
 const parseXml = require('xml2js').parseString;
 
-
 app.use(function(req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 	next();
 });
-
 app.use(express.json());
-
 app.listen(5000, () => console.log('listening'));
-
 
 app.post('/api/books', function(req, res, next) {
 	const {searchString, page}  = req.body;
 	let goodReadsResponse, books = [];
 	let url ='https://www.goodreads.com/search.xml?key=yuRphoNkZPJyCCeneZBZMA&q=' + searchString + '&page=' + page; 
 	console.log(url);
-
-
 	axios.get(url)
-		.then((result) => {
-		
+		.then((result) => {	
 				parseXml(result.data, function(err, jsonResult) {
 					// original goodreads response
 					goodReadsResponse = {
