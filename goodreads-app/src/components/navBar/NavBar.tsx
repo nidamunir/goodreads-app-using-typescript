@@ -3,14 +3,17 @@ import { Link, NavLink } from 'react-router-dom';
 
 const NavBar = () => {
 	return (
-		<nav className="navbar   navbar-light bg-light">
-			<Link className="navbar-brand" to="/">
-				Book - App
-			</Link>
-			<NavLink className="nav-item nav-link" to="/search">
-				Search
-			</NavLink>
+		<nav className="nav-wrapper grey darken-3">
+		<div className="container">
+			<Link to="/" className="brand-logo">Goodreads App</Link>
+			<ul className="right">
+				<li><NavLink className="nav-item nav-link" to="/search">
+						Search
+				</NavLink></li>
+			</ul>				
+		</div>
 		</nav>
+
 	);
 };
 

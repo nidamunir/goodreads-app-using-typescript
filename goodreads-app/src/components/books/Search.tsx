@@ -4,48 +4,7 @@ import { connect } from 'react-redux';
 import { fetchBooks } from '../../store/actions/bookActions';
 import { debounce } from 'lodash';
 import { ThunkDispatch } from 'redux-thunk';
-
 import { Result, Book, Options, State, Props, DispatchProps } from '../../types/types';
-
-// interface Props  extends RouteComponentProps<any>  {
-//   books: Array<Result>,
-//   searchQuery: string,
-//   fetchBooks : (options: Options) => void
-//   pageLastFetched: number,
-//   pagesCount: number
-// }
-
-// type DispatchProps = {
-//   fetchBooks : (options: Options) => void,
-//   history: any
-// }
-// type Result = {
-//   query: string,
-//   key: number,
-//   items: Array<Book>,
-//   pagesCount: number
-// } 
-// type Book = {
-//   id: string;
-//   title: string;
-//   author: string;
-//   avgRating: number;
-//   img: string;	
-//   ratingsCount:number;
-//   textReviewsCount:number
-
-// };
-
-// type State = {
-//   searchQuery: string,
-//   book: {
-//     books: Array<Result>,
-//     searchQuery: string,
-//     pageLastFetched: number,
-//     pagesCount: number
-//   },
-//   typingTimeout: number
-// };
 
 class Search extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -91,6 +50,7 @@ class Search extends React.Component<Props, State> {
       this.props.fetchBooks(options);
     },  
     300);
+
   handleSubmit = ( e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const options = {
@@ -136,7 +96,7 @@ class Search extends React.Component<Props, State> {
   };
   render() {
     return (
-      <div className="container">
+      <div>
           <form onSubmit={this.handleSubmit}>
               <div className="row">
                   <div className="input-field col s12">
@@ -154,10 +114,7 @@ class Search extends React.Component<Props, State> {
     )
 }
 }
-// type Options ={
-//   searchQuery: string,
-//   page: number
-// }
+
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>, ownProps: Props): DispatchProps => {
 
   return {

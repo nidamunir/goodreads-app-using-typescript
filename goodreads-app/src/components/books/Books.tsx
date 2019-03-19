@@ -5,43 +5,10 @@ import { ThunkDispatch } from 'redux-thunk';
 import { fetchBooks } from '../../store/actions/bookActions';
 import { debounce } from 'lodash';
 import { Result, Options, State, Props } from '../../types/types';
-
-// type Props = {
-//     books: Array<Result>,
-//     searchQuery: string,
-//     fetchBooks : (options: Options) => void
-//     pageLastFetched: number,
-//     pagesCount: number
-// }
-
+ 
 type DispatchProps = {
     fetchBooks : (options: Options) => void
 }
-// type Result = {
-//     query: string,
-//     key: number,
-//     items: Array<Book>,
-//     pagesCount: number
-// }
-// type Book = {
-//     id: string;
-//     title: string;
-//     author: string;
-//     avgRating: number;
-// 	img: string;	
-// 	ratingsCount:number;
-// 	textReviewsCount:number
-  
-// };
-// type State = {
-//     book: {
-//         books: Array<Result>,
-//         searchQuery: string,
-//         pageLastFetched: number,
-//         pagesCount: number
-//     }
-// }
-
 
 class Books extends Component<Props> {
    
@@ -65,17 +32,17 @@ class Books extends Component<Props> {
         () => {    
         const { books, searchQuery } = this.props;
         const filteredBooks = books.find(b => b.query == searchQuery);
-         if(filteredBooks && filteredBooks.key < filteredBooks.pagesCount)
-         {
-            const options = {
-                searchQuery : this.props.searchQuery,
-                page: filteredBooks.key + 1
-              }
-            this.props.fetchBooks(options);
-         }
-         else{
-            console.log("No more pages to fetch...")
+        if(filteredBooks && filteredBooks.key < filteredBooks.pagesCount)
+        {
+        const options = {
+            searchQuery : this.props.searchQuery,
+            page: filteredBooks.key + 1
             }
+            this.props.fetchBooks(options);
+        }
+        else{
+            console.log("No more pages to fetch...")
+        }
         },  
         300);
     render() {
@@ -113,10 +80,7 @@ const mapStateToProps = (state: State) => {
         pagesCount: state.book.pagesCount
     }
 }
-// type Options ={
-//     searchQuery: string,
-//     page: number
-//   }
+
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>, ownProps: Props): DispatchProps => {
     return {
       fetchBooks: async (options : Options) => {
