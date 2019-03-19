@@ -45,8 +45,9 @@ app.post('/api/books', function(req, res, next) {
 			res.send(
 				{
 					key : parseInt((goodReadsResponse.resultsStart / 20 ) + 1), 
-					value : books, 
-					pagesCount: parseInt((goodReadsResponse.totalResults / 20) + 1)
+					items : books, 
+					pagesCount: parseInt((goodReadsResponse.totalResults / 20) + 1),
+					query: goodReadsResponse.query
 				});
 		});
 	 
