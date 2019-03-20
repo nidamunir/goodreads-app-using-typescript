@@ -1,25 +1,6 @@
 import { Dispatch } from 'redux';
 import { Result, Options } from '../../types/types';
-// type Result = {
-//     query: string,
-//     key: number,
-//     items: Array<Book>,
-//     pagesCount: number
-// }
-// type Book = {
-//     id: string;
-//     title: string;
-//     author: string;
-//     avgRating: number;
-// 	img: string;	
-// 	ratingsCount:number;
-// 	textReviewsCount:number
-  
-// };
-// type Options ={
-//     searchQuery: string,
-//     page: number
-// }
+ 
 export const fetchBooks = (options : Options) => {
     return (dispatch : Dispatch, getState : any) => {
         const init = {
@@ -33,7 +14,7 @@ export const fetchBooks = (options : Options) => {
                 page: options.page
             })
         };
-    
+        
         const index = getState().book.books.findIndex((b : Result) => b.query === options.searchQuery && b.key >= options.page);
         if( index === -1)
         {
