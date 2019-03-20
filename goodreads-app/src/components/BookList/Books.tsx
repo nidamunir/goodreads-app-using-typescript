@@ -39,7 +39,7 @@ class Books extends Component<Props> {
     } else {
       console.log("No more pages to fetch...");
     }
-  }, 300);
+  }, 1000);
   render() {
     const { books, searchQuery } = this.props;
     const filteredBooks = books.find(b => b.query == searchQuery);
