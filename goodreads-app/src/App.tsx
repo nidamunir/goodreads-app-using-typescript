@@ -4,7 +4,7 @@ import { Switch, Route, BrowserRouter } from "react-router-dom";
 import NavBar from "./components/Layout/NavBar";
 import BookDetails from "./components/BookDetail/BookDetail";
 import Search from "./components/SearchPage/SearchPage";
-import Books from "./components/BookList/Books";
+import BookList from "./components/BookList/BookList";
 
 class App extends React.Component {
   render() {
@@ -15,7 +15,7 @@ class App extends React.Component {
           <main className="container">
             <Switch>
               <Route path="/search" component={Search} />
-              <Route path="/books" component={Books} />
+              <Route path="/books" component={BookList} />
               <Route path="/bookDetails" component={BookDetails} />
               <Route path="/" component={Search} />
             </Switch>

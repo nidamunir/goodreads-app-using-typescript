@@ -12,9 +12,9 @@ app.use(express.json());
 app.listen(5000, () => console.log('listening'));
 
 app.post('/api/books', function(req, res, next) {
-	const {searchString, page}  = req.body;
+	const {body : {query, page} }  = req;
 	let goodReadsResponse, books = [];
-	let url ='https://www.goodreads.com/search.xml?key=yuRphoNkZPJyCCeneZBZMA&q=' + searchString + '&page=' + page; 
+	let url ='https://www.goodreads.com/search.xml?key=yuRphoNkZPJyCCeneZBZMA&q=' + query + '&page=' + page; 
 	console.log(url);
 	axios.get(url)
 		.then((result) => {	
@@ -44,7 +44,7 @@ app.post('/api/books', function(req, res, next) {
 			});
 			res.send(
 				{
-					key : parseInt((goodReadsResponse.resultsStart / 20 ) + 1), 
+					page : parseInt((goodReadsResponse.resultsStart / 20 ) + 1), 
 					items : books, 
 					pagesCount: parseInt((goodReadsResponse.totalResults / 20) + 1),
 					query: goodReadsResponse.query

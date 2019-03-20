@@ -1,41 +1,30 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-
-type Book = {
-    id: string;
-    title: string;
-    author: string;
-    avgRating: number;
-    img: string;	
-    ratingsCount:number;
-    textReviewsCount:number
-  
-};
+import React from "react";
+import { Link } from "react-router-dom";
+import { Book } from "../../types/types";
 
 type Props = {
-    book: Book;
-}
-const BookSummary = (props: Props) => {
-  const b = props.book;
-    return (
-       <div>
-         
-         	<li key={b.id}  >
-							<h6>Title: {b.title}</h6>
-							<h6>Author: {b.author}</h6>
-							<img key={b.id} src={b.img} alt="book cover" />
-							<br />
-							<Link
-								to={{
-									pathname: '/bookDetails',
-									state: { book: b }
-								}}
-							>See Details</Link>
-							<hr />
-					 
-						</li>
-       </div>
-    );
-}
+  book: Book;
+};
+const BookSummary = ({ book }: Props) => {
+  return (
+    <div>
+      <li key={book.id}>
+        <h6>Title: {book.title}</h6>
+        <h6>Author: {book.author}</h6>
+        <img key={book.id} src={book.img} alt="book cover" />
+        <br />
+        <Link
+          to={{
+            pathname: "/bookDetails",
+            state: { book: book }
+          }}
+        >
+          See Details
+        </Link>
+        <hr />
+      </li>
+    </div>
+  );
+};
 
 export default BookSummary;

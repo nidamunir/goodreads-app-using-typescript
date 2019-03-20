@@ -4,17 +4,18 @@ import { connect } from "react-redux";
 import debounce from "lodash/debounce";
 import { ThunkDispatch } from "redux-thunk";
 import { fetchBooks } from "../../store/actions/bookActions";
-import { Book, Options, State, Props, DispatchProps } from "../../types/types";
+import { Book, State, Props, DispatchProps } from "../../types/types";
 
 class Search extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      searchQuery: "",
+      userInput: "",
+      page: 1,
       typingTimeout: window.setTimeout(function() {}, 500),
       book: {
         books: [],
-        searchQuery: "",
+        query: "",
         pageLastFetched: 0,
         pagesCount: 0
       }
@@ -24,12 +25,13 @@ class Search extends React.Component<Props, State> {
   handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const self = this;
     const { typingTimeout } = this.state;
+    const { value } = e.target;
     if (typingTimeout) {
       clearTimeout(typingTimeout);
     }
 
     this.setState({
-      searchQuery: e.target.value,
+      userInput: value,
       typingTimeout: window.setTimeout(function() {
         self.fetchSuggestions();
       }, 900)
@@ -38,38 +40,29 @@ class Search extends React.Component<Props, State> {
 
   fetchSuggestions = debounce(() => {
     console.log("getting suggestions");
-    const options = {
-      searchQuery: this.state.searchQuery,
-      page: 1
-    };
-    this.props.fetchBooks(options);
+    const { userInput, page } = this.state;
+    const { fetchBooks } = this.props;
+    fetchBooks(userInput, page);
   }, 300);
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const options = {
-      searchQuery: this.state.searchQuery,
-      page: 1
-    };
-    this.props.fetchBooks(options);
-    this.props.history.push("/books");
+    const { userInput, page } = this.state;
+    const { fetchBooks, history } = this.props;
+    fetchBooks(userInput, page);
+    history.push("/books");
   };
 
   renderSuggestions = () => {
-    const { books, searchQuery } = this.props;
+    const { books, query } = this.props;
+    const { userInput } = this.state;
+    // find book matching the query, and get items property
+    const { items = [] } = books.find(book => book.query == query) || {};
+    let sortedBooks = items
+      .sort((a: Book, b: Book) => b.avgRating - a.avgRating)
+      .slice(0, 5);
 
-    let filteredBooks = books.find(b => b.query == searchQuery);
-
-    let sortedBooks =
-      filteredBooks &&
-      filteredBooks.items
-        .sort((a: Book, b: Book) => b.avgRating - a.avgRating)
-        .slice(0, 5);
-
-    if (
-      this.state.searchQuery.length === 0 ||
-      this.state.searchQuery !== searchQuery
-    ) {
+    if (userInput.length === 0 || userInput !== query) {
       return <p>Enter a search query.</p>;
     }
     if (!sortedBooks) {
@@ -77,15 +70,15 @@ class Search extends React.Component<Props, State> {
     } else {
       return (
         <div>
-          {sortedBooks.map(b => (
-            <div key={b.id}>
+          {sortedBooks.map(book => (
+            <div key={book.id}>
               <Link
                 to={{
                   pathname: "/bookDetails",
-                  state: { book: b }
+                  state: { book }
                 }}
               >
-                {b.title} - {b.author} - {b.avgRating}
+                {book.title} - {book.author} - {book.avgRating}
               </Link>
               <br />
             </div>
@@ -128,19 +121,15 @@ const mapDispatchToProps = (
   ownProps: Props
 ): DispatchProps => {
   return {
-    fetchBooks: async (options: Options) => {
-      await dispatch(fetchBooks(options));
+    fetchBooks: async (query: string, page: number) => {
+      await dispatch(fetchBooks(query, page));
     },
     history: ownProps.history
   };
 };
 const mapStateToProps = (state: State) => {
-  return {
-    books: state.book.books,
-    searchQuery: state.book.searchQuery,
-    pageLastFetched: state.book.pageLastFetched,
-    pagesCount: state.book.pagesCount
-  };
+  const { books, query: query, pageLastFetched, pagesCount } = state.book;
+  return { books, query, pageLastFetched, pagesCount };
 };
 export default connect(
   mapStateToProps,
