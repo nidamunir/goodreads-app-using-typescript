@@ -21,7 +21,9 @@ export type Book = {
 //   searchQuery: string;
 //   page: number;
 // };
-
+export type BookListState = {
+  isLoading: boolean;
+};
 export type State = {
   userInput: string;
   typingTimeout: number;

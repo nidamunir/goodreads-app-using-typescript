@@ -27,7 +27,8 @@ const projectReducer = (state = initState, action: Action) => {
           books: books.concat(data),
           query,
           pageLastFetched: page,
-          pagesCount
+          pagesCount,
+          isLoading: false
         };
       } else {
         if (books[index].page >= page) return state;
@@ -38,7 +39,8 @@ const projectReducer = (state = initState, action: Action) => {
           books: books.filter(b => b.query !== query).concat(data),
           query,
           pageLastFetched: page,
-          pagesCount
+          pagesCount,
+          isLoading: false
         };
       }
     case "FETCH_BOOK_ERROR":
